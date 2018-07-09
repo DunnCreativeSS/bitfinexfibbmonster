@@ -1,36 +1,10 @@
 # bfxfibbmonster
 
-The bot is currently set up to run on Ethfinex:
+The bot is currently set up to run on Bitfinex
 
-https://www.ethfinex.com/?refcode=hfT8i73kyT
-
-Donations also welcome:
+Donations are welcome:
 
 0x3CE52a2a8c60fA944d2ff7ccDA563fe81d0D16F7 (Eth)
-
-If you wanted to fork this repo and replace these lines in BFX.js it'll work perfectly on Bitfinex, however they don't run a referral program so do consider a donation:
-
- ws: {
-    url: "wss://api.ethfinex.com/ws/2",
-    agent
-  },
-
-  rest: {
-    url: "https://api.ethfinex.com",
-    agent
-  }
-  
-  with:
-  
-   ws: {
-    url: WS_URL,
-    agent
-  },
-
-  rest: {
-    url: REST_URL,
-    agent
-  }
 
 Pull requests also welcome :)
 
@@ -42,7 +16,7 @@ https://dimas16ethfinexbot.herokuapp.com/
 
 2nd guy (coinbase withdrawal delayed):
 
-https://kwitzachethfinexbot.herokuapp.com/
+https://bfxfibbmonsterx.herokuapp.com/
 
 Yes, absolutely, for those concerned with the security of their API keys they can run their own bot on their own Node server.
 
@@ -57,31 +31,16 @@ $env:thedatabase="thedb"
 
 These are:
 
-bapi: 1st Ethfinex api key
-bkey: 2nd Ethfinex api secret
-bapi2: 2nd Ethfinex api key
-bkey2: 2nd Ethfinex api secret
+bapi: 1st finex api key
+bkey: 2nd finex api secret
+bapi2: 2nd finex api key
+bkey2: 2nd finex api secret
 btcusd: the value of btcusd, can update this daily, it's used only for the web app to show you your usd earnings and not for anything else in the script
 email: Your email for trade notifications. Be sure to whitelist jarettrsdunn@gmail.com in your email client.
-mnstart: your net USD worth of Eth/Tokens you deposit into Ethfinex. This is used to calculate your % winnings/losings on the site.
+mnstart: your net USD worth of Eth/Tokens you deposit into finex. This is used to calculate your % winnings/losings on the site.
 mongodb: will look like this, you'll get it from your provider. If you do use Atlas remember to whitelist the 0.0.0.0/0 IPs. mongodb+srv://jare:<PASSWORD>@cluster0-8dygf.mongodb.net/test?retryWrites=true
 SENDGRID_API_KEY: you can use mine I'm unsure what the limit on emails are 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
 thedatabase: (any unique name)
-
-I built a bot first for Poloniex then for Bitfinex and it's as easy as switching 2 lines of code to get it to work on Ethfinex. Note that the attached backtests are for the bot running Ethfinex pairs on Bitfinex because the backtest suite didn't support Ethfinex out of the box.
-
-In return for being able to run my bot with your balance, I ask that you sign up to Ethfinex using my affiliate link. Non-verified accounts can still deposit and withdraw, however they won't be able to take part in the NEC fee rebate until verified (but earnings are backdated).
-
-If you trade as a maker on Ethfinex, half the maker fees and half the taker fees are refunded to you once a month (on the 14th) in NEC tokens on Ethfinex. This might not sound like a lot but hear me out: when I was running this bot on 0.1 Bitcoin Cash balance on Bitfinex (~$100) I managed to put $10k USD worth of volume through the order books in 1-2 days (and still turn a profit). If you extrapolate, that could be a ton of fee rebates seeing as how the bot is a maker 3/4 of the time.
-
-The bot should outperform the backtests, as I was unable to find a way to accurately backtest selling/buying half the trade value at a limit and the other half at a trailing stop (which the bot does, to maximize profits).
-
-The bot analyzes the last day's trading activity and sets stop limit reminders for itself to buy/sell at the next down/up Fibonacci levels. It then sells/buys back in at the next Fib level up/down, and 1/2 the value is put into a trailing stop.
-
-I backtested the bot on SAN/BTC, GNT/BTC, TRX/BTC which are all pairs available on Ethfinex (and Bitfinex for backtesting), for a period of ~four months during both an uptrend and downtrend.
-
----I had posted this previously for Bitfinex and without relevant backtests, and then found that Bitfinex no longer has an affiliate program. The community also asked for backtests, so I took a day or two to learn how to backtest using Catalyst for Python (while brushing up on my Python skills) to bring you these results---
-
 Backtest results:
 
 SAN/BTC (black):
