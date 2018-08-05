@@ -31,23 +31,75 @@ const rest = bfx.rest(2, {
 apiKey: process.env.bapi, apiSecret: process.env.bkey});
 var keys = []
 var keys2 = []
+var sleep = require('system-sleep')
 ws.on('open', () => {
   ws.auth()
 	console.log('open')
-	rest.calcAvailableBalance('tBTCUSD', 1, 0.090072, 'MARGIN').then(balances => {
-	////console.log(balances[0]);
-	})
-	rest.symbols().then(symbols => {
-		for (var s in symbols) {
-			//console.log('t' + symbols[s].toUpperCase());
-			if ( symbols[s].toUpperCase().slice(-3) == "ETH" ||  symbols[s].toUpperCase().slice(-3) == "BTC" ||  symbols[s].toUpperCase().slice(-3) == "USD"){
-			keys.push('trade:1m:t' + symbols[s].toUpperCase());
-			keys2.push('t' + symbols[s].toUpperCase());
-			subs('t' + symbols[s].toUpperCase(), symbols.length);
+	symbolDo();
+})
+async function symbolDo(){
+	var tickers = await bitfinexapi.fetchTickers();
+		for (var s in tickers){
+			var k = tickers[s].symbol;
+		if (k == "BTC/USDT"){
+			console.log(k);
+			console.log(tickers[s].symbol);
+			console.log(tickers[s])
+			btcusd = tickers[s].ask;
+		}
+		else if (k == "ETH/BTC"){
+			console.log(k);
+			ethbtc = tickers[s].ask;
+		}
+		}
+		for (var s in tickers) {
+			var k = tickers[s].symbol;
+
+	if (k.slice(-4)== "USDT"){
+			if (!volKs.includes(k) && ((tickers[s].volume * tickers[s].ask) / amt)){						
+			volKs.push(k);
+				volTot += (tickers[s].volume * tickers[s].ask) / amt;
+			}
+			}
+			else if (k.slice(-3)== "ETH"){
+				var amt = ethbtc;
+				//console.log(amt);
+			if (!volKs.includes(k) && ((tickers[s].volume * tickers[s].ask) / amt)){						
+			//console.log(k)
+			volKs.push(k);
+				volTot += (tickers[s].volume * tickers[s].ask) / amt;
+			}
+			}
+			else if (k.slice(-3)== "BTC"){
+				var amt = 1;
+				//console.log(amt);
+			if (!volKs.includes(k) && ((tickers[s].volume * tickers[s].ask) / amt)){						
+
+			volKs.push(k);
+				volTot += (tickers[s].volume * tickers[s].ask) / amt;
+			}
+			}
+			//console.log(volTot);
+			
+			var avg = volTot / volKs.length;
+			//console.log(avg);
+			if ((tickers[s].volume * tickers[s].ask) / amt > (avg / 20)){
+				
+				if (!tickers.includes('trade:1m:' + k)){
+					tickers.push('trade:1m:' + k)
+					console.log(tickers);
+					if ( tickers[s].symbol.toUpperCase().slice(-3) == "ETH" ||  tickers[s].symbol.toUpperCase().slice(-3) == "BTC" ||  tickers[s].symbol.toUpperCase().slice(-3) == "USD"){
+			keys.push('trade:1m:t' + tickers[s].symbol.toUpperCase().slice('/'));
+			keys2.push('t' + tickers[s].symbol.toUpperCase().slice('/'));
+			subs('t' + tickers[s].symbol.toUpperCase().slice('/'), tickers.length);
 			
 			
 	
 			}
+				}
+			}
+			//console.log('t' + tickers[s].toUpperCase());
+			
 		}
 		ws.subscribeTicker("tETHBTC");
 		tickerticker("tETHBTC");
@@ -104,11 +156,8 @@ ws.on('open', () => {
 		});
 	
 	}, 2000);
-	}).catch(err => {
-		
-	})
-})
-
+	
+}
 function subs(ss, count){
 	if ((activeOrders[ss] <= 1) && count <= 3){
 	setTimeout(function(){
@@ -137,42 +186,11 @@ ws.onTicker({ symbol: k }, (ticker) => {
 	}
 	if (btcusd != 0 && ethbtc != 0){
 		
-	if (k.slice(-3)== "USD"){
 						var amt = btcusd;
 						//console.log(amt);
-					if (!volKs.includes(k) && ((ticker.volume * ticker.ask) / amt)){						
-					volKs.push(k);
-						volTot += (ticker.volume * ticker.ask) / amt;
-					}
-					}
-					else if (k.slice(-3)== "ETH"){
-						var amt = ethbtc;
-						//console.log(amt);
-					if (!volKs.includes(k) && ((ticker.volume * ticker.ask) / amt)){						
-					//console.log(k)
-					volKs.push(k);
-						volTot += (ticker.volume * ticker.ask) / amt;
-					}
-					}
-					else if (k.slice(-3)== "BTC"){
-						var amt = 1;
-						//console.log(amt);
-					if (!volKs.includes(k) && ((ticker.volume * ticker.ask) / amt)){						
-
-					volKs.push(k);
-						volTot += (ticker.volume * ticker.ask) / amt;
-					}
-					}
-					//console.log(volTot);
 					
-					var avg = volTot / volKs.length;
-					//console.log(avg);
-					if ((ticker.volume * ticker.ask) / amt > (avg / 20)){
-						
-						if (!tickers.includes('trade:1m:' + k)){
 							//console.log(k);
-						tickers.push('trade:1m:' + k)
-						}
+						
 						bestAsk[k] = ticker.ask;
 						bestBid[k] = ticker.bid;
 						avg = ((parseFloat(ticker['high']) + parseFloat(ticker['low'])) / 2);
@@ -254,15 +272,8 @@ ws.onTicker({ symbol: k }, (ticker) => {
 								}	
 							}
 								
-					}
+					
 	} else {
-		if (k == "tBTCUSD"){
-			console.log(ticker);
-			btcusd = ticker.ask;
-		}
-		else if (k == "tETHBTC"){
-			ethbtc = ticker.ask;
-		}
 	}
 });
 }
@@ -566,7 +577,6 @@ ws.onOrderSnapshot({}, (orders) => {
   })*/
 })
 
-ws.open()
 	setTimeout(function(){
 	oo();
 	}, 10000);
@@ -1206,6 +1216,7 @@ function sortFunction(a,b){
 		var mnstart =  132.50258064;
 async function setBal(){
 	var mi = await rest.marginInfo()
+	console.log(btcusd);
 	rest.calcAvailableBalance('tBTCUSD', 1, btcusd, 'MARGIN').then(balances => {
 	var btcusdavail = (balances[0] * btcusd);
 	console.log(btcusdavail);
@@ -1231,7 +1242,7 @@ async function setBal(){
 }
 setTimeout(function(){
 setBal();
-}, 800);
+}, 12800);
 setInterval(function(){
 	setBal();
 }, 120000);
@@ -1933,7 +1944,7 @@ app.get('/', function(req, res) {
 	}
 });
 
-			app.listen(process.env.PORT || 8080, function() {});
+			app.listen(process.env.PORT || 8081, function() {});
 						////console.log('2');
 //poloniex.subscribe('BTC_ETC');
  var vols = [];
