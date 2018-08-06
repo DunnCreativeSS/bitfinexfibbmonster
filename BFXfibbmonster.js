@@ -26,7 +26,7 @@ const { CancelOrder }  = require('./node_modules/bitfinex-api-node/lib/models')
 var startDate = new Date();
 const CANDLE_KEY = 'trade:1m:tBTCUSD'
 console.log('bapi: ' + process.env.bapi);
-var btcusd = parseFloat(process.env.btcusd);
+var btcusdold = parseFloat(process.env.btcusd);
 const rest = bfx.rest(2, {
 apiKey: process.env.bapi, apiSecret: process.env.bkey});
 var keys = []
@@ -35,7 +35,8 @@ var sleep = require('system-sleep')
 ws.on('open', () => {
   ws.auth()
 	console.log('open')
-	symbolDo();
+	setTimeout(function(){
+	symbolDo();}, 5000)
 })
 async function symbolDo(){
 	var tickers = await bitfinexapi.fetchTickers();
@@ -142,6 +143,8 @@ async function symbolDo(){
 		ws.subscribeTicker("tBTCUSD");
 		tickerticker("tBTCUSD");
 		for (var d in doc3){
+			if (doc3[d]){
+				if (doc3[d].trades){
 			if (!ks.includes(doc3[d].trades.k)){
 							ks.push(doc3[d].trades.k);
 						}
@@ -150,6 +153,8 @@ async function symbolDo(){
 						}
 					subs(doc3[d].trades.k, 0);
 					}
+				}
+			}
 					doks();
 				});
 		}
@@ -1173,12 +1178,12 @@ setInterval(function(){
 }, 45000);
 ws.open()
 var mongodb = "";
-const express = require('express');
 var startDate = new Date()
 var favicon = require('serve-favicon')
 var path = require('path')
  var startBtc = 0.00360557 ; //0.00796575 
  var startBch = 0.06579248;
+const express = require('express');
 var app = express()
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')))
 	function sortFunction3(a,b){  
@@ -1818,18 +1823,36 @@ string = "IOTA" + string;
 		totaltotal = totaltotal * Math.pow(10, 8);
 		thetotalbtc = thetotalbtc * Math.pow(10, 8);
 		thetotaleth = thetotaleth  * Math.pow(10, 18);
+		var collection = dbo.collection('prices2');
+			collection.find({
+
+				}, {
+					$exists: true
+				}).sort({
+					_id: -1
+
+				}).toArray(function(err, doc3) {
+					var prices = []
+					for (var p in doc3){
+						prices.push(doc3[p].prices);
+					}
+
 		console.log('PL ' + PL);
 		console.log('PL start'+  parseFloat(process.env.plstart));
-		res.send('<head><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="120"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
-		+ 'current time: ' + new Date()
+		res.send('<head><script src="https://code.highcharts.com/highcharts.js"></script><style>#container {	min-width: 310px;	max-width: 800px;	height: 400px;	margin: 0 auto }</style> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <script src="https://code.highcharts.com/modules/series-label.js"></script>  <script src="https://code.highcharts.com/modules/exporting.js"></script> <script src="https://code.highcharts.com/modules/export-data.js"></script> </div><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="120"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
+		+ '<div id="container"></div>'+ 'current time: ' + new Date()
 		+ 'minutes: ' + minutes + '<br>'
 		+ 'hours: ' + hours + '<br>'
 		+ '<h1>PL: ' + (PL) + '%</h1>'
+		+ '<h1>BTCUSD: ' + (btcusdold/btcusd).toFixed(4) + '%</h1>'
 		+ '<h1>percent/hr: ' + percentHr + '%</h1>'
 		+ '<h2>usdt gains (usdt): ' + thetotalusdt + '</h2>'
 		+ '<h2>btc gains (btc only) (sats): ' + thetotalbtc + '</h2>'
 		+ '<h2>eth gains (wei): ' + thetotaleth + '</h2>'
 		+ '<h1>total gains (sats) (since trade history, including positions not listed here, including open orders IF SOLD (the above PL value is more accurate to judge the bot\'s performance)): ' + totaltotal + '</h1>'
+		+ '<div style="display:none;" id="prices">' + JSON.stringify(prices) + '</div>'
+		+ '<script>var prices=JSON.parse($("#prices").text()),btcusd=[],pl=[];for(var p in prices){var t=prices[p].t,btcusdt=prices[p].btcusd,plt=prices[p].pl;btcusd.push([t,btcusdt]),pl.push([t,plt])}Highcharts.chart("container",{title:{text:"Bitfinex Fibb Monster"},subtitle:{text:"By: Jarett Dunn jarettrsdunn@gmail.com"},yAxis:{title:{text:"$"}},legend:{layout:"vertical",align:"right",verticalAlign:"middle"},plotOptions:{series:{label:{connectorAllowed:!1}}},series:[{name:"BTCUSD",data:btcusd},{name:"P/L",data:pl}],responsive:{rules:[{condition:{maxWidth:500},chartOptions:{legend:{layout:"horizontal",align:"center",verticalAlign:"bottom"}}}]}});</script>'				
+		
 		+ '<div style="display:none;" id="stoplimits">' + JSON.stringify(stoplimits) + '</div>'
 		+ '<div style="display:none;" id="orders2">' + JSON.stringify(orders2) + '</div>'
 		+ '<div style="display:none;" id="trades">' + JSON.stringify(trades) + '</div>'
@@ -1844,9 +1867,8 @@ string = "IOTA" + string;
 		+ '<div id="showData2"></div><br>closed orders 24hrs: (max 200) (' + trades.length + ')'
 		+ '<div id="showData3"></div>'
 		+ '<script>for(var col=[],i=0;i<JSON.parse($("#totalsusd").text()).length;i++)for(var key in JSON.parse($("#totalsusd").text())[i])-1===col.indexOf(key)&&col.push(key);var table7=document.createElement("table");for(tr=table7.insertRow(-1),i=0;i<col.length;i++){(th=document.createElement("th")).innerHTML=col[i],tr.appendChild(th)}for(i=0;i<JSON.parse($("#totalsusd").text()).length;i++){tr=table7.insertRow(-1);for(var j=0;j<col.length;j++){(tabCell=tr.insertCell(-1)).innerHTML=JSON.parse($("#totalsusd").text())[i][col[j]]}}var divContainer5=document.getElementById("showData5");divContainer5.innerHTML="",divContainer5.appendChild(table7);for(col=[],i=0;i<JSON.parse($("#totalsbtc").text()).length;i++)for(var key in JSON.parse($("#totalsbtc").text())[i])-1===col.indexOf(key)&&col.push(key);var table8=document.createElement("table");for(tr=table7.insertRow(-1),i=0;i<col.length;i++){(th=document.createElement("th")).innerHTML=col[i],tr.appendChild(th)}for(i=0;i<JSON.parse($("#totalsbtc").text()).length;i++){tr=table7.insertRow(-1);for(j=0;j<col.length;j++){(tabCell=tr.insertCell(-1)).innerHTML=JSON.parse($("#totalsbtc").text())[i][col[j]]}}var divContainer6=document.getElementById("showData6");divContainer6.innerHTML="",divContainer6.appendChild(table8);for(col=[],i=0;i<JSON.parse($("#totalseth").text()).length;i++)for(var key in JSON.parse($("#totalseth").text())[i])-1===col.indexOf(key)&&col.push(key);var table9=document.createElement("table");for(tr=table7.insertRow(-1),i=0;i<col.length;i++){var th;(th=document.createElement("th")).innerHTML=col[i],tr.appendChild(th)}for(i=0;i<JSON.parse($("#totalseth").text()).length;i++){tr=table7.insertRow(-1);for(j=0;j<col.length;j++){var tabCell;(tabCell=tr.insertCell(-1)).innerHTML=JSON.parse($("#totalseth").text())[i][col[j]]}}var divContainer7=document.getElementById("showData7");divContainer7.innerHTML="",divContainer7.appendChild(table9);for(var col=[],i=0;i<JSON.parse($("#stoplimits").text()).length;i++)for(var key in JSON.parse($("#stoplimits").text())[i])-1===col.indexOf(key)&&col.push(key);var table2=document.createElement("table");for(tr=table2.insertRow(-1),i=0;i<col.length;i++){var th=document.createElement("th");th.innerHTML=col[i],tr.appendChild(th)}for(i=0;i<JSON.parse($("#stoplimits").text()).length;i++){tr=table2.insertRow(-1);for(var j=0;j<col.length;j++){var tabCell=tr.insertCell(-1);tabCell.innerHTML=JSON.parse($("#stoplimits").text())[i][col[j]]}}var divContainer2=document.getElementById("showData");divContainer2.innerHTML="",divContainer2.appendChild(table2);for(var col=[],i=0;i<JSON.parse($("#orders2").text()).length;i++)for(var key in JSON.parse($("#orders2").text())[i])-1===col.indexOf(key)&&col.push(key);var table3=document.createElement("table");for(tr=table3.insertRow(-1),i=0;i<col.length;i++){(th=document.createElement("th")).innerHTML=col[i],tr.appendChild(th)}for(i=0;i<JSON.parse($("#orders2").text()).length;i++){tr=table3.insertRow(-1);for(var j=0;j<col.length;j++){(tabCell=tr.insertCell(-1)).innerHTML=JSON.parse($("#orders2").text())[i][col[j]]}}var divContainer3=document.getElementById("showData2");divContainer3.innerHTML="",divContainer3.appendChild(table3);for(col=[],i=0;i<JSON.parse($("#trades").text()).length;i++)for(var key in JSON.parse($("#trades").text())[i])-1===col.indexOf(key)&&col.push(key);var table4=document.createElement("table");for(tr=table4.insertRow(-1),i=0;i<col.length;i++){var th;(th=document.createElement("th")).innerHTML=col[i],tr.appendChild(th)}for(i=0;i<JSON.parse($("#trades").text()).length;i++){tr=table4.insertRow(-1);for(j=0;j<col.length;j++){var tabCell;(tabCell=tr.insertCell(-1)).innerHTML=JSON.parse($("#trades").text())[i][col[j]]}}var divContainer4=document.getElementById("showData3");divContainer4.innerHTML="",divContainer4.appendChild(table4);for(var col=[],i=0;i<JSON.parse($("#lalapositions").text()).length;i++)for(var key in JSON.parse($("#lalapositions").text())[i])-1===col.indexOf(key)&&col.push(key);var table8=document.createElement("table");for(tr=table8.insertRow(-1),i=0;i<col.length;i++){(th=document.createElement("th")).innerHTML=col[i],tr.appendChild(th)}for(i=0;i<JSON.parse($("#lalapositions").text()).length;i++){tr=table8.insertRow(-1);for(var j=0;j<col.length;j++){(tabCell=tr.insertCell(-1)).innerHTML=JSON.parse($("#lalapositions").text())[i][col[j]]}}var divContainerlala=document.getElementById("showPositions");divContainerlala.innerHTML="",divContainerlala.appendChild(table8);</script>');
-							
+			})		
 							}
-					
 	},(3000));
 	});
 	}catch(err){
@@ -1989,7 +2011,19 @@ app.get('/', function(req, res) {
 					}
 					});
 				}
- 
+				setInterval(function(){prices();}, 60 * 1000)
+ function prices(){
+ 	
+var d = new Date().getTime();
+var collection = dbo.collection('prices2');
+			
+						collection.insertOne({
+				'prices': {t: d, btcusd: btcusdold/btcusd, pl: PL}
+			}, function(err, res) {
+				if (err) {}
+				
+			}); 
+					}
  function insert(wp, collection){
 	//console.log(wp);
 	
@@ -2233,7 +2267,8 @@ async function collectionDo(collection){
 								}
 								}
 								}
-							
+								if (d3d){
+							if (d3d.trades){
 						if (d3d.trades.bought1 == false){
 							
 						if (parseFloat(bestAsk[d3d.trades.k]) <= (d3d.trades.buy1 * 1.005) && parseFloat(bestAsk[d3d.trades.k]) > 0.00000200)	 {
@@ -2342,6 +2377,8 @@ godosell = false;
 							}
 						}
 						}
+					}
+				}
 						})
 					}
 					
