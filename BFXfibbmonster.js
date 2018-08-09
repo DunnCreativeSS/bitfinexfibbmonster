@@ -264,13 +264,11 @@ ws.onTicker({ symbol: k }, (ticker) => {
 
 								}).toArray(function(err, doc3) {
 									//console.log(doc3);
-									if (doc3.length == 0){
 									if (!winnas.includes(k)){
 										winnas.push(k);
 															
 									
 							insert(winners[k], collection);
-									}
 									}
 									});
 									if (tickercount[k] >= 75){
