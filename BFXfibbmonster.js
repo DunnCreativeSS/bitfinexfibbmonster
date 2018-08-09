@@ -1251,7 +1251,7 @@ setBal();
 }, 12800);
 setInterval(function(){
 	setBal();
-}, 120000);
+}, 20000);
 var trades = []
 var divisor = 1
 var PL = 0
@@ -2034,7 +2034,7 @@ prices.splice(300)
 					}
 					});
 				}
-				setInterval(function(){prices();}, 61 * 1000)
+				setInterval(function(){prices();}, 20 * 1000)
  function prices(){
  	
 var d = new Date().getTime();
