@@ -1962,7 +1962,6 @@ app.get('/', function(req, res) {
 });
 
 app.get('/graph', function (req, res){
-	thetotaleth = thetotaleth  * Math.pow(10, 18);
 		var collection = dbo.collection(process.env.prices2);
 			collection.find({
 
