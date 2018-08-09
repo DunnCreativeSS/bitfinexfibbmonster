@@ -2052,6 +2052,18 @@ var collection = dbo.collection(process.env.prices2);
 			}
 			  //////console.log(res.result);
 			}); 
+					}else {
+ console.log('insert');
+						collection.insertOne({
+				'trades': wp
+			}, function(err, res) {
+				if (err) 
+				
+			if (wp.currencyPair == "BTC_BCH"){
+				////////console.log(wp);
+			}
+			  //////console.log(res.result);
+			}); 
 					}
 					} 	else {
  console.log('insert');
