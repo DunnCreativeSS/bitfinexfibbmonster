@@ -55,34 +55,37 @@ async function symbolDo(){
 		}
 		for (var s in tickers) {
 			var k = tickers[s].symbol;
-
 	if (k.slice(-4)== "USDT"){
-			if (!volKs.includes(k) && ((tickers[s].volume * tickers[s].ask) / amt)){						
+		var amt = parseFloat(btcusd);
+			if (!volKs.includes(k)){						
 			volKs.push(k);
-				volTot += (tickers[s].volume * tickers[s].ask) / amt;
+				volTot += (parseFloat(tickers[s].info.volume) * parseFloat(tickers[s].info.ask)) / amt;
 			}
 			}
 			else if (k.slice(-3)== "ETH"){
-				var amt = ethbtc;
+				var amt = parseFloat(ethbtc);
 				//console.log(amt);
-			if (!volKs.includes(k) && ((tickers[s].volume * tickers[s].ask) / amt)){						
+			if (!volKs.includes(k)){						
 			//console.log(k)
 			volKs.push(k);
-				volTot += (tickers[s].volume * tickers[s].ask) / amt;
+				volTot += (parseFloat(tickers[s].info.volume) * parseFloat(tickers[s].info.ask)) / amt;
 			}
 			}
 			else if (k.slice(-3)== "BTC"){
 				var amt = 1;
 				//console.log(amt);
-			if (!volKs.includes(k) && ((tickers[s].volume * tickers[s].ask) / amt)){						
+			if (!volKs.includes(k) ){						
 
 			volKs.push(k);
-				volTot += (tickers[s].volume * tickers[s].ask) / amt;
+				volTot += (parseFloat(tickers[s].info.volume) * parseFloat(tickers[s].info.ask)) / amt;
 			}
 			}
 			//console.log(volTot);
 			
 			var avg = volTot / volKs.length;
+			console.log(volTot)
+			console.log(avg)
+			console.log(volKs.length)
 			//console.log(avg);
 			if ((tickers[s].volume * tickers[s].ask) / amt > (avg / 20)){
 				
