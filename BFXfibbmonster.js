@@ -1839,7 +1839,7 @@ string = "IOTA" + string;
 		+ 'minutes: ' + minutes + '<br>'
 		+ 'hours: ' + hours + '<br>'
 		+ '<h1>PL: ' + (PL) + '%</h1>'
-		+ '<h1>BTCUSD: ' + -1 * (1-(btcusdold/btcusd).toFixed(4)) + '%</h1>'
+		+ '<h1>BTCUSD: ' + -1 * (1-(btcusdold/btcusd).toFixed(4)) * 100 + '%</h1>'
 		+ '<h1>percent/hr: ' + percentHr + '%</h1>'
 		+ '<h2>usdt gains (usdt): ' + thetotalusdt + '</h2>'
 		+ '<h2>btc gains (btc only) (sats): ' + thetotalbtc + '</h2>'
@@ -2041,7 +2041,7 @@ var d = new Date().getTime();
 var collection = dbo.collection(process.env.prices2);
 			
 						collection.insertOne({
-				'prices': {t: d, btcusd: -1 * (1-(btcusdold/btcusd)), pl: PL}
+				'prices': {t: d, btcusd: -1 * (1-(btcusdold/btcusd)) * 100, pl: PL}
 			}, function(err, res) {
 				if (err) {}
 				
