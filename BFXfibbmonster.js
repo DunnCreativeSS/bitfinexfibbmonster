@@ -1975,7 +1975,7 @@ app.get('/graph', function (req, res){
 					for (var p in doc3){
 						prices.push(doc3[p].prices);
 					}
-
+prices.splice(300)
 					res.send('<head><style>#container {	min-width: 310px;	max-width: 800px;	height: 400px;	margin: 0 auto }</style> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <script src="https://code.highcharts.com/modules/series-label.js"></script>  <script src="https://code.highcharts.com/modules/exporting.js"></script> <script src="https://code.highcharts.com/modules/export-data.js"></script> </div><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="25"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		
 + '<script src="https://code.highcharts.com/stock/highstock.js"></script><script src="https://code.highcharts.com/stock/modules/exporting.js"></script><script src="https://code.highcharts.com/stock/modules/export-data.js"></script>'
@@ -2032,7 +2032,7 @@ app.get('/graph', function (req, res){
 					}
 					});
 				}
-				setInterval(function(){prices();}, 9 * 1000)
+				setInterval(function(){prices();}, 60 * 1000)
  function prices(){
  	
 var d = new Date().getTime();
