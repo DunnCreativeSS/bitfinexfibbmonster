@@ -87,15 +87,15 @@ async function symbolDo(){
 			console.log(avg)
 			console.log(volKs.length)
 			//console.log(avg);
-			if ((tickers[s].volume * tickers[s].ask) / amt > (avg / 20)){
+			if ((parseFloat(tickers[s].info.volume)* parseFloat(tickers[s].info.ask)) / amt > (avg / 20)){
 				
-				if (!tickers.includes('trade:1m:' + k)){
-					tickers.push('trade:1m:' + k)
-					console.log(tickers);
+				if (!tickersa.includes('trade:1m:' + k)){
+					tickersa.push('trade:1m:' + k)
+					//console.log(tickers);
 					if ( tickers[s].symbol.toUpperCase().slice(-3) == "ETH" ||  tickers[s].symbol.toUpperCase().slice(-3) == "BTC" ||  tickers[s].symbol.toUpperCase().slice(-3) == "USD"){
 			keys.push('trade:1m:t' + tickers[s].symbol.toUpperCase().slice('/'));
 			keys2.push('t' + tickers[s].symbol.toUpperCase().slice('/'));
-			subs('t' + tickers[s].symbol.toUpperCase().slice('/'), tickers.length);
+			subs('t' + tickers[s].symbol.toUpperCase().slice('/'), tickersa.length);
 			
 			
 	
@@ -108,7 +108,7 @@ async function symbolDo(){
 		ws.subscribeTicker("tETHBTC");
 		tickerticker("tETHBTC");
 		for (var k in keys) {
-			//console.log(keys2[k]);	
+			console.log(keys2[k]);	
 		ws.subscribeTicker(keys2[k]);
 			tickerticker(keys2[k]);
 			
@@ -176,7 +176,7 @@ function subs(ss, count){
 }, Math.random() * 2000 * 40); 
 	}
 }
-var tickers = []
+var tickersa = []
 	var winners = {};
 	var winnas = []
 	var tickercount = []
@@ -254,7 +254,7 @@ ws.onTicker({ symbol: k }, (ticker) => {
 								winners[k].k = k;
 								winners[k].currencyPair = k;
 								
-								//console.log(winners[k]);
+								console.log(winners[k]);
 								winners[k].cancelled = false;
 								collection.find({
 
