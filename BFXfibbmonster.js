@@ -93,9 +93,9 @@ async function symbolDo(){
 					tickersa.push('trade:1m:' + k)
 					//console.log(tickers);
 					if ( tickers[s].symbol.toUpperCase().slice(-3) == "ETH" ||  tickers[s].symbol.toUpperCase().slice(-3) == "BTC" ||  tickers[s].symbol.toUpperCase().slice(-3) == "USD"){
-			keys.push('trade:1m:t' + tickers[s].symbol.toUpperCase().slice('/'));
-			keys2.push('t' + tickers[s].symbol.toUpperCase().slice('/'));
-			subs('t' + tickers[s].symbol.toUpperCase().slice('/'), tickersa.length);
+			keys.push('trade:1m:t' + tickers[s].symbol.toUpperCase().slice('/').replace('/', ""));
+			keys2.push('t' + tickers[s].symbol.toUpperCase().slice('/').replace('/', ""));
+			subs('t' + tickers[s].symbol.toUpperCase().slice('/').replace('/', ""), tickersa.length);
 			
 			
 	
@@ -267,7 +267,7 @@ ws.onTicker({ symbol: k }, (ticker) => {
 									if (!winnas.includes(k)){
 										winnas.push(k);
 															
-									
+									console.log('inserty?')
 							insert(winners[k], collection);
 									}
 									});
@@ -545,7 +545,7 @@ var collection = dbo.collection(string);
 		string = string.substr(4, string.length );
 		string = "IOT" + string;
 		}
-	string = 't' + string;
+	string = 't' + string.replace('/', "");
 	if (cancelOrders.includes(string)){
 		//const o = bitfinexapi.cancelOrder(orders[o2].id)
 
@@ -1271,7 +1271,7 @@ async function doget(req, res){
 		for (var o in orders){
 			if (orders[o].symbol){
 	var string = orders[o].symbol.replace('/', "");
-	string = 't' + string;
+	string = 't' + string.replace('/', "");
 	if (string.slice(-4) == "USDT"){
 		string = string.substr(0, string.length -1 );
 	}if (activeOrders[string] == undefined){
@@ -1312,6 +1312,7 @@ async function doget(req, res){
 				}).toArray(async function(err, doc3) {
 					for (var d in doc3){
 						
+							console.log(doc3[d]);
 					//	////////console.log(doc3[d])
 						
 						//////////console.log(doc3[d].trades);
@@ -1321,38 +1322,31 @@ async function doget(req, res){
 							}
 						if (doc3[d].trades.bought1 == false){
 							var sl = {'activeOrders': activeOrders[doc3[d].trades.k], 'direction': 'buy1', 'pair' : doc3[d].trades.k, 'stoplimit': doc3[d].trades.buy1, 'currentAsk': bestAsk[doc3[d].trades.k], 'percent': (parseFloat(bestAsk[doc3[d].trades.k]) / parseFloat(doc3[d].trades.buy1))}
-						if ((activeOrders[doc3[d].trades.k] <= 1) &&  tickers.includes('trade:1m:' + doc3[d].trades.k)){
 						stoplimits.push(sl);
 							
-						}
+						
 						}
 						if (doc3[d].trades.bought2 == false){
 							if (doc3[d].trades.buy2 != undefined){
 							//console.log(bestAsk);
 							var sl = {'activeOrders': activeOrders[doc3[d].trades.k], 'direction': 'buy2', 'pair' : doc3[d].trades.k, 'stoplimit': doc3[d].trades.buy2, 'currentAsk': bestAsk[doc3[d].trades.k], 'percent': (parseFloat(bestAsk[doc3[d].trades.k]) / parseFloat(doc3[d].trades.buy2))}
 							
-if ((activeOrders[doc3[d].trades.k] <= 1)&&  tickers.includes('trade:1m:' + doc3[d].trades.k)){
 						stoplimits.push(sl);
 							
-						}								
 							}
 						} 
 						if (doc3[d].trades.sold1 == false){
 							var sl = {'activeOrders': activeOrders[doc3[d].trades.k], 'direction': 'sell1', 'pair' : doc3[d].trades.k, 'stoplimit': doc3[d].trades.sell1, 'currentBid': bestBid[doc3[d].trades.k], 'percent': (parseFloat(doc3[d].trades.sell1 / parseFloat(bestBid[doc3[d].trades.k])))}
-if ((activeOrders[doc3[d].trades.k] <= 1)&&  tickers.includes('trade:1m:' + doc3[d].trades.k)){
 						stoplimits.push(sl);
 							
-						}							
 						}
 						if (doc3[d].trades.sold2 == false){
 							if (doc3[d].trades.sell2 != undefined){
 
 							var sl = {'activeOrders': activeOrders[doc3[d].trades.k], 'direction': 'sell2', 'pair' : doc3[d].trades.k, 'stoplimit': doc3[d].trades.sell2, 'currentBid': bestBid[doc3[d].trades.k], 'percent': (parseFloat(doc3[d].trades.sell2) / parseFloat(bestBid[doc3[d].trades.k]))}
 							
-if ((activeOrders[doc3[d].trades.k] <= 1)&&  tickers.includes('trade:1m:' + doc3[d].trades.k)){
 						stoplimits.push(sl);
 							
-						}								
 							}
 						} 
 						}
@@ -1410,7 +1404,7 @@ if ((activeOrders[doc3[d].trades.k] <= 1)&&  tickers.includes('trade:1m:' + doc3
 									string = string.substr(4, string.length );
 									string = "IOT" + string;
 									}
-								string = 't' + string;
+								string = 't' + string.replace('/', "");
 									//console.log(string);
 								//	console.log(bestAsk);
 								if (orders2[d].symbol.slice(-4) == "USDT"){
@@ -1549,7 +1543,7 @@ if ((activeOrders[doc3[d].trades.k] <= 1)&&  tickers.includes('trade:1m:' + doc3
 										}
 									}
 								}
-								string = 't' + string;
+								string = 't' + string.replace('/', "");
 								//console.log('string ' + string);
 								orders2[d].activeOrders = activeOrders[string]; 
 								
