@@ -1973,9 +1973,9 @@ app.get('/graph', function (req, res){
 				}).toArray(function(err, doc3) {
 					var prices = []
 					for (var p in doc3){
-						prices.push([doc3[p].prices.t/1000, doc3[p].prices.btcusd, doc3[p].prices.pl]);
+						prices.push(doc3[p].prices);
 					}
-					prices.splice(50)
+					prices.splice(150)
 					res.send('<head><script src="https://code.highcharts.com/highcharts.js"></script><style>#container {	min-width: 310px;	max-width: 800px;	height: 400px;	margin: 0 auto }</style> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <script src="https://code.highcharts.com/modules/series-label.js"></script>  <script src="https://code.highcharts.com/modules/exporting.js"></script> <script src="https://code.highcharts.com/modules/export-data.js"></script> </div><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="25"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		+ '<div id="container"></div>'
 		+ '<div style="display:none;" id="prices">' + JSON.stringify(prices) + '</div>'
