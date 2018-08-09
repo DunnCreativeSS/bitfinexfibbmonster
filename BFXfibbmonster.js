@@ -1823,7 +1823,7 @@ string = "IOTA" + string;
 		totaltotal = totaltotal * Math.pow(10, 8);
 		thetotalbtc = thetotalbtc * Math.pow(10, 8);
 		thetotaleth = thetotaleth  * Math.pow(10, 18);
-		var collection = dbo.collection('prices2');
+		var collection = dbo.collection(process.env.prices2);
 			collection.find({
 
 				}, {
@@ -2015,7 +2015,7 @@ app.get('/', function(req, res) {
  function prices(){
  	
 var d = new Date().getTime();
-var collection = dbo.collection('prices2');
+var collection = dbo.collection(process.env.prices2);
 			
 						collection.insertOne({
 				'prices': {t: d, btcusd: btcusdold/btcusd, pl: PL}
