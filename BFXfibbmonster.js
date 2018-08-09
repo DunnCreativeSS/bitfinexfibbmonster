@@ -1983,7 +1983,7 @@ app.get('/graph', function (req, res){
 					for (var p in doc3){
 						prices.push(doc3[p].prices);
 					}
-					res.send('<head><style>#container {	min-width: 310px;	max-width: 800px;	height: 400px;	margin: 0 auto }</style> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  </div><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="25"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
+					res.send('<head><style>#container {	min-width: 310px;	max-width: 800px;	height: 400px;	margin: 0 auto }</style> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>  </div><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		
 + '<script>$(document).ready(function(){console.log("ready!");var e=[],t=[];setInterval(function(){$.getJSON("https://bitfinexmarginfibbmonster.herokuapp.com/update",function(o){console.log(o),console.log((new Date).getTime());var a=(new Date).getTime();e.push([a,o.pl]),t.push([a,o.btcusd]),chart.series[0].setData(e),chart.series[1].setData(t),console.log(o.trades14)})},3e4)});</script>'
 + '<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script><script src="https://code.highcharts.com/stock/highstock.js"></script>'
