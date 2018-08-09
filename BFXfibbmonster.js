@@ -184,7 +184,17 @@ function tickerticker(k){
 	
 ws.onTicker({ symbol: k }, (ticker) => {
 	//console.log(ticker)
-
+		if (k == "tBTCUSD"){
+			console.log(k);
+			console.log(tickers[s].symbol);
+			console.log(tickers[s])
+			btcusd = ticker.ask;
+		}
+		else if (k == "tETHBTC"){
+			console.log(k);
+			ethbtc = ticker.ask;
+		}
+		
 	if (tickercount[k] == undefined){
 		tickercount[k] = 0;
 	}
@@ -1125,7 +1135,7 @@ o2.on('error', () => {
 }
 var usds = []
 var ethbtc = 0;
-var btcusd = 0;
+var btcusd;
 var btcs = []
 var prevTS = []
 var eths = []
