@@ -1980,7 +1980,7 @@ app.get('/graph', function (req, res){
 		+ '<div id="container"></div>'
 		+ '<div style="display:none;" id="prices">' + JSON.stringify(prices) + '</div>'
 		+ '<script>var prices=JSON.parse($("#prices").text()),btcusd=[],pl=[];for(var p in prices){var t=prices[p].t,btcusdt=prices[p].btcusd,plt=prices[p].pl;btcusd.push([t,btcusdt]),pl.push([t,plt])}var options={rangeSelector:{buttons:[{count:1,type:"day",text:"1d"},{count:5,type:"day",text:"5d"},{count:7,type:"day",text:"7d"},{count:14,type:"day",text:"14d"},{count:21,type:"day",text:"21d"},{type:"all",text:"All"}]},yAxis:[{labels:{align:"right",x:-3},title:{text:"Price"},height:"60%",lineWidth:2,resize:{enabled:!0}}],title:{text:"Bitfinex Fibb Monster"},subtitle:{text:"By: Jarett Dunn jarettrsdunn@gmail.com"},yAxis:{title:{text:"$"}},legend:{layout:"vertical",align:"right",verticalAlign:"middle"},plotOptions:{series:{label:{connectorAllowed:!1}}},series:[{name:"BTCUSD",data:btcusd},{name:"P/L",data:pl}],responsive:{rules:[{condition:{maxWidth:500},chartOptions:{legend:{layout:"horizontal",align:"center",verticalAlign:"bottom"}}}]}};</script>'				
-		+ '<script>Highcharts.chart("container", options);</script>');
+		+ '<script>Highcharts.stockChart("container", options);</script>');
 })
 			})
 			app.listen(process.env.PORT || 8081, function() {});
