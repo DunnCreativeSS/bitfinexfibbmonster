@@ -2028,7 +2028,7 @@ app.get('/graph', function (req, res){
 					}
 					});
 				}
-				setInterval(function(){prices();}, 60 * 1000)
+				setInterval(function(){prices();}, 23 * 1000)
  function prices(){
  	
 var d = new Date().getTime();
