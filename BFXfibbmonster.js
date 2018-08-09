@@ -1978,11 +1978,13 @@ app.get('/graph', function (req, res){
 prices.splice(300)
 					res.send('<head><style>#container {	min-width: 310px;	max-width: 800px;	height: 400px;	margin: 0 auto }</style> <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script> <script src="https://code.highcharts.com/modules/series-label.js"></script>  <script src="https://code.highcharts.com/modules/exporting.js"></script> <script src="https://code.highcharts.com/modules/export-data.js"></script> </div><link rel="icon" href="https://polofibbmonster.herokuapp.com/favicon.ico?v=2" /><meta http-equiv="refresh" content="25"><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script></head><h1>Don\'t Panic! If the data seems off, wait a minute or so.</h1>'
 		
-+ '<script src="https://code.highcharts.com/stock/highstock.js"></script><script src="https://code.highcharts.com/stock/modules/exporting.js"></script><script src="https://code.highcharts.com/stock/modules/export-data.js"></script>'
-		
-		+ '<div id="container"></div>'
++ '<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script><script src="https://code.highcharts.com/stock/highstock.js"></script>'
++ '<script src="https://code.highcharts.com/stock/modules/exporting.js"></script><script src="https://code.highcharts.com/stock/modules/export-data.js"></script>'
+
++'<div id="container" style="height: 400px; min-width: 310px"></div>'
+
 		+ '<div style="display:none;" id="prices">' + JSON.stringify(prices) + '</div>'
-+ '<script>var prices=JSON.parse($("#prices").text()),btcusd=[],pl=[];for(var p in prices){var t=prices[p].t,btcusdt=prices[p].btcusd,plt=prices[p].pl;btcusd.push([t,btcusdt]),pl.push([t,plt])};var options={title:{text:"Bitfinex Margin Fib Monster"},rangeSelector:{buttons:[{count:1,type:"minute",text:"1m"},{count:5,type:"minute",text:"5m"},{count:10,type:"minute",text:"10m"},{count:30,type:"minute",text:"30m"},{count:1,type:"hour",text:"1h"},{type:"all",text:"All"}],inputEnabled:!1,selected:0},yAxis:[{labels:{align:"right",x:-3},title:{text:"%"},height:"100%",lineWidth:2,resize:{enabled:!0}}],tooltip:{split:!0},series:[{cropThreshold: 999900,name:"PL",data:pl,color:"green"},{cropThreshold: 999900,name:"btcusd",data:btcusd,color:"black"}]};</script>'
++ '<script>var prices=JSON.parse($("#prices").text()),btcusd=[],pl=[];for(var p in prices){var t=prices[p].t,btcusdt=prices[p].btcusd,plt=prices[p].pl;btcusd.push([t,btcusdt]),pl.push([t,plt])};var options={rangeSelector:{selected:1},title:{text:"Bitfinex Fibb Monster"},series:[{name:"PL",data:pl, color:"green"},{name:"BTCUSD",data:btcusd}]};</script>'
 		+ '<script>Highcharts.stockChart("container", options);</script>');
 
 })
