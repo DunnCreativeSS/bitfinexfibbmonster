@@ -2034,7 +2034,7 @@ prices.splice(300)
 					}
 					});
 				}
-				setInterval(function(){prices();}, 30 * 1000)
+				setInterval(function(){prices();}, 61 * 1000)
  function prices(){
  	
 var d = new Date().getTime();
